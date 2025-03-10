@@ -1,0 +1,39 @@
+name: Bandit
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  bandit:
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Bandit
+        run: |
+          pip install bandit bandit-sarif-formatter
+
+      - name: Run Bandit Scan
+        uses: shundor/python-bandit-scan@ab1d87dfccc5a0ffab88be3aaac6ffe35c10d6cd
+        with:
+          exit_zero: false # Fail the action if issues are found
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: . # Ensure all files are scanned
+          level: HIGH # Include high-confidence issues
+          confidence: HIGH # Only report high-confidence issues
