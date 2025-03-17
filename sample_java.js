@@ -4,7 +4,7 @@
 function evalInjection(userInput) {
     // This is a vulnerable code because eval() will execute arbitrary JavaScript.
     eval(userInput); // Never use eval() with user input!
-}
+} //Invalid
 
 // Example of a dangerous call
 let userInput1 = "alert('Hacked!')";
